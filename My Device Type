@@ -1,0 +1,170 @@
+metadata {
+	definition (name: "My Sprinkler (example)", author: "clh41413") {
+    		capability "Switch"
+            //capability "polling"
+        	command "hello"
+            command "zone1On"
+            command "zone2On"
+            command "zone3On"
+            command "zone4On"
+            command "zone1Off"
+            command "zone2Off"
+            command "zone3Off"
+            command "zone4Off"
+        	command "goodbye"
+        	command "poll"
+            attribute "greeting","string"
+            
+	}
+
+	tiles {
+             
+        standardTile("myzone1", "device.myzone1", width: 1, height: 1, canChangeIcon: true, canChangeBackground: true) {
+		//	state "default", label: 'zone 1', action: "zone1On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+            state "zone1On", label: 'zone 1', action: "zone1Off", icon: "st.switches.switch.on", backgroundColor: "#79b821"
+            state "zone1Off", label: 'zone 1', action: "zone1On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+		}  
+        standardTile("myzone2", "device.myzone2", width: 1, height: 1, canChangeIcon: true, canChangeBackground: true) {
+		//	state "default", label: 'zone 2', action: "zone2On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+            state "zone2On", label: 'zone 2', action: "zone2Off", icon: "st.switches.switch.on", backgroundColor: "#79b821"
+            state "zone2Off", label: 'zone 2', action: "zone2On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+		}  
+        
+        standardTile("myzone3", "device.myzone3", width: 1, height: 1, canChangeIcon: true, canChangeBackground: true) {
+		//	state "default", label: 'zone 3', action: "zone3On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+            state "zone3On", label: 'zone 3', action: "zone3Off", icon: "st.switches.switch.on", backgroundColor: "#79b821"
+            state "zone3Off", label: 'zone 3', action: "zone3On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+		} 
+        
+        standardTile("myzone4", "device.myzone4", width: 1, height: 1, canChangeIcon: true, canChangeBackground: true) {
+		//	state "default", label: 'zone 4', action: "zone4On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+            state "zone4On", label: 'zone 4', action: "zone4Off", icon: "st.switches.switch.on", backgroundColor: "#79b821"
+            state "zone4Off", label: 'zone 4', action: "zone4On", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+		}
+        
+		standardTile("greeting", "device.greeting", width: 1, height: 1, canChangeIcon: true, canChangeBackground: true) {
+			state "default", label: 'hello', action: "hello", icon: "st.switches.switch.on", backgroundColor: "#ccccff"
+		}     
+		valueTile("message", "device.greeting", inactiveLabel: false) {
+			state "greeting", label:'${currentValue}', unit:""
+		}
+        
+		main "myzone1"
+		details(["myzone1", "myzone2", "myzone3", "myzone4","greeting","message"])
+	}
+    simulator {
+       }
+}
+
+// parse events into attributes
+def parse(String description) {
+	//log.debug "Parsing '${description}'"
+    def msg = zigbee.parse(description)?.text
+    log.debug "Parse got '${msg}'"
+
+    def parts = msg.split(" ")
+    def name  = parts.length>0?parts[0].trim():null
+    //log.debug name + " is the name of the device"
+    def value = parts.length>1?parts[1].trim():null
+    //log.info name + " name of the device; " + value + " is the value of the device"
+    
+    if(name == "ping"){
+    	log.info "Pinging the device"
+    }else if (name == "" || name == "Null"){
+    	log.info "Null was the name of the device"
+    }
+    else{
+    	sendEvent(name: name, value: value, isStateChange: true)
+        log.info name + " " + value + " was sent"
+    }
+}
+/*
+Map parse(String description) {
+
+	def value = zigbee.parse(description)?.text
+	def linkText = getLinkText(device)
+	def descriptionText = getDescriptionText(description, linkText, value)
+	def handlerName = value
+	def isStateChange = value != "ping"
+	def displayed = value && isStateChange
+
+	def result = [
+		value: value,
+		name: value in ["on","off"] ? "switch" : (value && value != "ping" ? "greeting" : null),
+		handlerName: handlerName,
+		linkText: linkText,
+		descriptionText: descriptionText,
+		isStateChange: isStateChange,
+		displayed: displayed
+	]
+
+	log.debug result.descriptionText
+    log.debug result.value
+    log.debug result.name
+    result
+}*/
+
+def hello() {
+	log.debug "Hello World!"
+	zigbee.smartShield(text: "hello").format()
+}
+
+def zone1On() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone1On").format()
+}
+
+def zone1Off() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone1Off").format()
+   
+}
+
+def zone2On() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone2On").format()
+}
+
+def zone2Off() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone2Off").format()
+}
+
+def zone3On() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone3On").format()
+}
+
+def zone3Off() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone3Off").format()
+}
+
+def zone4On() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone4On").format()
+}
+
+def zone4Off() {
+	//log.debug "Hello World!"
+	zigbee.smartShield(text: "zone4Off").format()
+}
+
+def goodbye() {
+	log.debug "Bye Bye!"
+	zigbee.smartShield(text: "goodbye").format()
+}
+
+def poll(){
+	myPoll()
+}
+
+def myPoll() {
+    log.debug "Polling requested"
+    zigbee.smartShield(text: "poll").format()
+}
+
+
+
+
+
