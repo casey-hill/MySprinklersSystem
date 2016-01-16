@@ -3,10 +3,10 @@ Sprinklers that work with Smartthings
 
 A few quick and easy tasks
 
-Install the arduino code onto the device
-Install the new device type in SmartThings
-Install the SmartThings App
-Install new Simulated Virtual Device  
+Install the arduino code onto the device  
+Install the new device type in SmartThings  
+Install the SmartThings App  
+Install new Simulated Virtual Device    
 
 
 Step 1 - Install the Smartthings App  
